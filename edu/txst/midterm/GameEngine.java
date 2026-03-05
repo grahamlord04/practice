@@ -49,8 +49,8 @@ public class GameEngine {
 		int targetCol = playerCol + dCol;
 		int targetCell = board.getCell(targetRow, targetCol);
 
-		// 1. Check for Walls or Out of Bounds
-		if (targetCell == WALL || targetCell == -1) {
+		// 1. Check for Walls or Out of Bounds or Goal
+		if (targetCell == WALL || targetCell == -1 || targetCell == GOAL) {
 			return; // Movement blocked
 		}
 
