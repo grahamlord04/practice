@@ -4,6 +4,7 @@ public class GameEngine {
 	private Board board;
 	private int playerRow;
 	private int playerCol;
+	private int reachedGoals = 0;
 
 	// Cell Type Constants
 	private static final int FLOOR = 0;
@@ -19,6 +20,9 @@ public class GameEngine {
 	}
 
 	public boolean isGameOver() {
+		if (reachedGoals==2){
+			return true;
+		}
 		return false;
 	}
 
@@ -49,8 +53,8 @@ public class GameEngine {
 		int targetCol = playerCol + dCol;
 		int targetCell = board.getCell(targetRow, targetCol);
 
-		// 1. Check for Walls or Out of Bounds or Goal or Box is on Goal
-		if (targetCell == WALL || targetCell == -1 || targetCell == GOAL || targetCell == BOX_ON_GOAL) {
+		// 1. Check for Walls or Out of Bounds or Goal
+		if (targetCell == WALL || targetCell == -1 || targetCell == GOAL) {
 			return; // Movement blocked
 		}
 
@@ -62,10 +66,12 @@ public class GameEngine {
 
 			// Can only push if the space behind the box is Floor or Goal
 			if (nextCell == FLOOR || nextCell == GOAL) {
+				
 				// Move the box
 				int newBoxType = (nextCell == GOAL) ? BOX_ON_GOAL : BOX;
 				board.setCell(nextRow, nextCol, newBoxType);
-
+				if(nextCell == GOAL)
+					reachedGoals++;
 				// Clear the box's old position (it becomes a floor or remains a goal)
 				int oldBoxPosType = (targetCell == BOX_ON_GOAL) ? GOAL : FLOOR;
 				board.setCell(targetRow, targetCol, oldBoxPosType);
