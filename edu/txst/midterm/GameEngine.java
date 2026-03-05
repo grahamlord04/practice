@@ -49,7 +49,7 @@ public class GameEngine {
 		int targetCol = playerCol + dCol;
 		int targetCell = board.getCell(targetRow, targetCol);
 
-		// 1. Check for Walls or Out of Bounds or Goal
+		// 1. Check for Walls or Out of Bounds or Goal or Box is on Goal
 		if (targetCell == WALL || targetCell == -1 || targetCell == GOAL || targetCell == BOX_ON_GOAL) {
 			return; // Movement blocked
 		}
