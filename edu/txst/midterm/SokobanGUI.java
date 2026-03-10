@@ -6,14 +6,27 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
+/**
+ * Provides the graphical user interface for the Sokoban game.
+ * <p>
+ * This class creates the game window, handles menu actions,
+ * processes keyboard input, and displays the board on screen.
+ * </p>
+ */
 public class SokobanGUI extends JFrame {
 	private Board originalBoard;
 	private Board currentBoard;
 	private GameEngine engine;
 	private GamePanel gamePanel;
 	private JMenuItem resetItem;
-	private int stepCounter;
 
+	/** Stores the number of player moves made in the current level. */
+	public static int stepCounter = 0;
+
+	/**
+	 * Creates the Sokoban game window and initializes
+	 * the menu, game panel, and keyboard controls.
+	 */
 	public SokobanGUI() {
 		setTitle("16-Bit Sokoban");
 		setSize(640, 480); // Adjusted for 10x5 grid with scaling
@@ -27,6 +40,12 @@ public class SokobanGUI extends JFrame {
 
 		// Handle Keyboard Input
 		addKeyListener(new KeyAdapter() {
+			/**
+			 * Responds to key presses and moves the player
+			 * in the corresponding direction.
+			 *
+			 * @param e the keyboard event triggered by the user
+			 */
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (engine == null)
@@ -61,6 +80,13 @@ public class SokobanGUI extends JFrame {
 		});
 	}
 
+	/**
+	 * Initializes the menu bar and game menu.
+	 * <p>
+	 * The menu includes options to open a level file
+	 * and reset the current game.
+	 * </p>
+	 */
 	private void initMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu gameMenu = new JMenu("Game");
@@ -78,6 +104,13 @@ public class SokobanGUI extends JFrame {
 		setJMenuBar(menuBar);
 	}
 
+	/**
+	 * Opens a file chooser so the user can select a CSV level file.
+	 * <p>
+	 * After a level is selected, the board is loaded, copied,
+	 * and assigned to the game engine.
+	 * </p>
+	 */
 	private void openFile() {
 		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		int result = fileChooser.showOpenDialog(this);
@@ -97,6 +130,13 @@ public class SokobanGUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Resets the current level to its original state.
+	 * <p>
+	 * This restores the board from the saved original copy
+	 * and creates a new game engine for the reset level.
+	 * </p>
+	 */
 	private void resetGame() {
 		if (originalBoard != null) {
 			currentBoard = originalBoard.clone();
@@ -106,15 +146,29 @@ public class SokobanGUI extends JFrame {
 		}
 	}
 
-	// Inner class for custom rendering
+	/**
+	 * Custom panel used to draw the Sokoban board.
+	 */
 	private class GamePanel extends JPanel {
 		private Board board;
+
+		/** Size in pixels of each tile drawn on the board. */
 		private final int TILE_SIZE = 64; // Scale up for visibility
 
+		/**
+		 * Sets the board to be displayed by the panel.
+		 *
+		 * @param board the board to render
+		 */
 		public void setBoard(Board board) {
 			this.board = board;
 		}
 
+		/**
+		 * Paints the game board and all tiles on the panel.
+		 *
+		 * @param g the graphics object used for drawing
+		 */
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
@@ -129,6 +183,14 @@ public class SokobanGUI extends JFrame {
 			}
 		}
 
+		/**
+		 * Draws a single tile of the board using a placeholder color.
+		 *
+		 * @param g the graphics object used for drawing
+		 * @param type the tile type to draw
+		 * @param x the x-coordinate of the tile
+		 * @param y the y-coordinate of the tile
+		 */
 		private void drawTile(Graphics g, int type, int x, int y) {
 			// Placeholder colors until you link the sprite loading logic
 			switch (type) {
@@ -146,6 +208,11 @@ public class SokobanGUI extends JFrame {
 		}
 	}
 
+	/**
+	 * Starts the Sokoban application.
+	 *
+	 * @param args command-line arguments passed to the program
+	 */
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> new SokobanGUI().setVisible(true));
 	}
